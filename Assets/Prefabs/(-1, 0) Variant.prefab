@@ -53,6 +53,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1449371819797586937, guid: e063fcac39e5d0c4187f324740815efa, type: 3}
+      propertyPath: isWalkable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1449371819797586937, guid: e063fcac39e5d0c4187f324740815efa, type: 3}
       propertyPath: isPlaceable
       value: 0
       objectReference: {fileID: 0}

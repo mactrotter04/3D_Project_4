@@ -104,4 +104,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Waypoint
   isPlaceable: 0
+  isWalkable: 1
   towerPrefab: {fileID: 0}

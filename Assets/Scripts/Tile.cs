@@ -3,6 +3,7 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     [SerializeField] bool isPlaceable;
+    [SerializeField] bool isWalkable = true;
     [SerializeField] Tower towerPrefab;
 
     GridManager gridManager;
@@ -18,6 +19,7 @@ public class Tile : MonoBehaviour
         }
     }
 
+
     void Awake()
     {
         gridManager = FindFirstObjectByType<GridManager>();
@@ -30,7 +32,7 @@ public class Tile : MonoBehaviour
         {
             coordinates = gridManager.GetCoorditnesFromPosition(transform.position);
 
-            if (!isPlaceable)
+            if (!isWalkable)
             {
                 gridManager.BlockNode(coordinates);
             }
@@ -39,6 +41,8 @@ public class Tile : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (!IsPlaceable) return;
+
         if (gridManager.GetNode(coordinates).isWalkable && !pathFinder.WillBlockPath(coordinates))
         {
             //Debug.Log($"clicked on: {transform.name}");
