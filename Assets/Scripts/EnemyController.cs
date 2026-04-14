@@ -1,23 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
     [SerializeField][Range(0f, 5f)] float speed = 1f;
 
-    List<Waypoint> path = new List<Waypoint>();
+    List<Node> path = new List<Node>();
 
     Enemy enemy;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    PathFinder pathFinder;
+    GridManager gridManager;
+
+
+    void Awake()
     {
         enemy = GetComponent<Enemy>(); 
+        pathFinder = FindFirstObjectByType<PathFinder>();
+        gridManager = FindFirstObjectByType<GridManager>();
     }
     void OnEnable()
     {
-        FindPath();
+        RecalcualtePath();
         ReturnToStart();
         StartCoroutine(FollowPath());
     }
@@ -30,11 +36,11 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator FollowPath()
     {
-        foreach (Waypoint waypoint in path)
+        for(int i = 0; i <path.Count; i++)
         {
             //Debug.Log(waypoint.name);
             Vector3 startPos = transform.position;
-            Vector3 endPos = waypoint.transform.position;
+            Vector3 endPos = gridManager.GetPositionFromCoordinates(path[i].coordinates);
 
             //smooth movemnt between points
             float travelPercent = 0f;
@@ -51,26 +57,16 @@ public class EnemyController : MonoBehaviour
         FinishPath();
     }
 
-    void FindPath()
+    void RecalcualtePath()
     {
         path.Clear();
 
-        GameObject parent = GameObject.FindGameObjectWithTag("path");
-
-        foreach (Transform child in parent.transform)
-        {
-            Waypoint waypoint = child.GetComponent<Waypoint>();
-            
-            if(waypoint != null)
-            {
-                path.Add(waypoint);
-            }
-        }
+        path = pathFinder.GetNewPath();
     }
 
     void ReturnToStart()
     {
-        transform.position = path[0].transform.position;
+        transform.position = gridManager.GetPositionFromCoordinates(pathFinder.StartCoordinates);
     }
 
     void FinishPath()
