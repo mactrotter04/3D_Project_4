@@ -1,11 +1,13 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TargetLocator : MonoBehaviour
 {
-    [SerializeField] Transform weapon;
+    [SerializeField] Transform cannonBase;
+    [SerializeField] Transform cannonBarrel;
     [SerializeField] ParticleSystem projectileParticles;
     [SerializeField] float range = 15f;
-    Transform target; 
+    Transform target;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -17,14 +19,29 @@ public class TargetLocator : MonoBehaviour
     void Update()
     {
         AimWeapon();
+        FindClosestTarget();
     }
 
     void AimWeapon()
     {
         float targetDistance = Vector3.Distance(target.position, transform.position);
-        weapon.LookAt(target);
+        Vector3 baseDirection = target.position - cannonBase.position;
+        baseDirection.y = 0f;
 
-        if(targetDistance < range)
+        if (baseDirection != Vector3.zero)
+        {
+            cannonBase.rotation = Quaternion.LookRotation(baseDirection, Vector3.up); //onlyroates y
+        }
+
+        Vector3 dir = target.position - cannonBarrel.position;
+
+        if (dir != Vector3.zero)
+        {
+            float xAngle = Quaternion.LookRotation(dir).eulerAngles.x;
+            cannonBarrel.localEulerAngles = new Vector3(xAngle, 0f, 0f);
+        }
+
+        if (targetDistance < range)
         {
             Attack(true);
         }
@@ -60,5 +77,11 @@ public class TargetLocator : MonoBehaviour
         }
 
         target = closestTarget;
+    }
+
+
+    void PracticeWeponTuring()
+    {
+
     }
 }

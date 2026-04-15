@@ -6,6 +6,7 @@ public class ObjectPool : MonoBehaviour
     [SerializeField] GameObject enemyPrefab;
     [SerializeField] [Range(0.1f, 30f)] float spawnDelay = 1f;
     [SerializeField] [Range(0, 100)] int poolSize = 5;
+    [SerializeField] float waveCountdown = 5f;
 
     GameObject[] pool;
 
@@ -52,7 +53,7 @@ public class ObjectPool : MonoBehaviour
         {
             if (pool[i].activeInHierarchy == false)
             {
-                pool[i].SetActive (true);
+                pool[i].SetActive(true);
                 return;
             }
         }
