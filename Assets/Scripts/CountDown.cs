@@ -8,7 +8,7 @@ public class CountDown : MonoBehaviour
     [SerializeField] float timeToCompleate = 180f;
     [SerializeField] float LevelLoadDelay = 3f;
     [SerializeField] ParticleSystem winParticles;
-
+    bool isFinished;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,13 +24,14 @@ public class CountDown : MonoBehaviour
 
         timerText.text = (timeToCompleate).ToString("0");
 
-        if (timeToCompleate <= 5)
+        if (timeToCompleate <= 10)
         {
             timerText.color = Color.red;
         }
 
-        if (timeToCompleate <= 0)
+        if (timeToCompleate <= 0 && !isFinished)
         {
+            isFinished = true;
             Invoke(nameof(LoadNextLevel), LevelLoadDelay);
             winParticles.Play();
         }
