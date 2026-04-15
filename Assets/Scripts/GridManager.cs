@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    public Dictionary<Vector2Int, Node> Grid
+    public Dictionary<Vector3Int, Node> Grid
     {
         get
         {
@@ -11,8 +11,8 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    [SerializeField] Vector2 gridSize;
-    Dictionary<Vector2Int, Node> grid = new Dictionary<Vector2Int, Node>();
+    [SerializeField] Vector3 gridSize;
+    Dictionary<Vector3Int, Node> grid = new Dictionary<Vector3Int, Node>();
 
     void Awake()
     {
@@ -25,16 +25,19 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < gridSize.y; y++)
             {
-                Vector2Int coordinates = new Vector2Int(x, y);
-                grid.Add(coordinates, new Node(coordinates, true));
-                Debug.Log(grid[coordinates].coordinates + " + " + grid[coordinates].isWalkable);
+                for (int z = 0; y < gridSize.y; z++)
+                {
+                    Vector3Int coordinates = new Vector3Int(x, y);
+                    grid.Add(coordinates, new Node(coordinates, true));
+                    Debug.Log(grid[coordinates].coordinates + " + " + grid[coordinates].isWalkable);
+                }
             }
         }
     }
 
-    public Node GetNode(Vector2Int coordinates)
+    public Node GetNode(Vector3Int coordinates)
     {
-        if(grid.ContainsKey(coordinates))
+        if (grid.ContainsKey(coordinates))
         {
             return grid[coordinates];
         }
@@ -42,39 +45,41 @@ public class GridManager : MonoBehaviour
         return null;
     }
 
-    public void BlockNode(Vector2Int coordinates)
+    public void BlockNode(Vector3Int coordinates)
     {
-        if(grid.ContainsKey(coordinates))
+        if (grid.ContainsKey(coordinates))
         {
             grid[coordinates].isWalkable = false;
         }
     }
 
-    public Vector2Int GetCoorditnesFromPosition(Vector3 position)
+    public Vector3Int GetCoorditnesFromPosition(Vector3 position)
     {
-        Vector2Int coordinates = new Vector2Int();
+        Vector3Int coordinates = new Vector3Int();
 
         coordinates.x = Mathf.RoundToInt(position.x / UnityEditor.EditorSnapSettings.move.x);
         coordinates.y = Mathf.RoundToInt(position.z / UnityEditor.EditorSnapSettings.move.z);
+        coordinates.z = Mathf.RoundToInt(position.y / UnityEditor.EditorSnapSettings.move.y);
 
         return coordinates;
     }
 
-    public Vector3 GetPositionFromCoordinates(Vector2Int coordinates)
+    public Vector3 GetPositionFromCoordinates(Vector3Int coordinates)
     {
         Vector3 position = new Vector3();
 
         position.x = coordinates.x * UnityEditor.EditorSnapSettings.move.x;
         position.z = coordinates.y * UnityEditor.EditorSnapSettings.move.z;
+        position.y = coordinates.z * UnityEditor.EditorSnapSettings.move.y;
 
         return position;
     }
 
     public void ResetNodes()
     {
-        foreach (KeyValuePair<Vector2Int, Node> entry in grid)
+        foreach (KeyValuePair<Vector3Int, Node> entry in grid)
         {
-            entry.Value.connectedTo = null; 
+            entry.Value.connectedTo = null;
             entry.Value.isExplored = false;
             entry.Value.isPath = false;
         }

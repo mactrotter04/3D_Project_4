@@ -3,26 +3,26 @@ using UnityEngine;
 
 public class PathFinder : MonoBehaviour
 {
-    [SerializeField] Vector2Int startCoordinates;
-    [SerializeField] Vector2Int destinationCoordinates;
+    [SerializeField] Vector3Int startCoordinates;
+    [SerializeField] Vector3Int destinationCoordinates;
 
     Node currentSearchNode;
     Node startNode;
     Node destinationNode;
 
     Queue<Node> frontier = new Queue<Node>();
-    Dictionary<Vector2Int, Node> reached = new Dictionary<Vector2Int, Node>();
+    Dictionary<Vector3Int, Node> reached = new Dictionary<Vector3Int, Node>();
 
-    Vector2Int[] direction = { Vector2Int.up,
-                               Vector2Int.right,
-                               Vector2Int.down,
-                               Vector2Int.left };
+    Vector3Int[] direction = { Vector3Int.right, Vector3Int.left,
+                               Vector3Int.up, Vector3Int.down,
+                               Vector3Int.forward + Vector3Int.right, Vector3Int.forward + Vector3Int.left, Vector3Int.forward + Vector3Int.up, Vector3Int.forward + Vector3Int.down,
+                               Vector3Int.back + Vector3Int.right, Vector3Int.back + Vector3Int.left, Vector3Int.back + Vector3Int.up, Vector3Int.back + Vector3Int.down};
 
     GridManager gridManager;
-    Dictionary<Vector2Int, Node> grid = new Dictionary<Vector2Int, Node>();
+    Dictionary<Vector3Int, Node> grid = new Dictionary<Vector3Int, Node>();
 
-    public Vector2Int StartCoordinates {  get { return startCoordinates; } }
-    public Vector2Int DestinationCoordinates { get { return destinationCoordinates; } }
+    public Vector3Int StartCoordinates {  get { return startCoordinates; } }
+    public Vector3Int DestinationCoordinates { get { return destinationCoordinates; } }
 
     void Awake()
     {
@@ -55,9 +55,9 @@ public class PathFinder : MonoBehaviour
     {
         List<Node> neighbours = new List<Node>();
 
-        foreach (Vector2Int direction in direction)
+        foreach (Vector3Int direction in direction)
         {
-            Vector2Int neighborCoordinates = currentSearchNode.coordinates + direction;
+            Vector3Int neighborCoordinates = currentSearchNode.coordinates + direction;
 
             if (grid.ContainsKey(neighborCoordinates))
             {
@@ -75,7 +75,7 @@ public class PathFinder : MonoBehaviour
         }
     }
 
-    void BreadthFirstSearch(Vector2Int coordinates)
+    void BreadthFirstSearch(Vector3Int coordinates)
     {
         startNode.isWalkable = true;
         destinationNode.isWalkable = true;
@@ -121,7 +121,7 @@ public class PathFinder : MonoBehaviour
         return path;
     }
 
-    public List<Node> GetNewPath(Vector2Int startCoordinates)
+    public List<Node> GetNewPath(Vector3Int startCoordinates)
     {
         gridManager.ResetNodes();
         BreadthFirstSearch(startCoordinates);
@@ -133,7 +133,7 @@ public class PathFinder : MonoBehaviour
         return GetNewPath(startCoordinates);
     }
 
-    public bool WillBlockPath(Vector2Int coordinates)
+    public bool WillBlockPath(Vector3Int coordinates)
     {
         if(grid.ContainsKey(coordinates))
         {

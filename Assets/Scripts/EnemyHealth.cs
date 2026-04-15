@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     [SerializeField] int maxHitPoints = 5;
-    [SerializeField] int diffcultyRamp = 1;
+    [SerializeField] int diffcultyRamp = 2;
     
     int currentHitPoints = 0;
 

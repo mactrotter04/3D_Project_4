@@ -42,8 +42,18 @@ public class EnemyController : MonoBehaviour
             Vector3 startPos = transform.position;
             Vector3 endPos = gridManager.GetPositionFromCoordinates(path[i].coordinates);
 
-            //smooth movemnt between points
-            float travelPercent = 0f;
+            if (endPos.y > startPos.y)
+            {
+                Vector3 verticaleEndPos = new Vector3(startPos.x + ((endPos.x - startPos.x) / 2), endPos.y, startPos.z + ((endPos.z - startPos.z) / 2));
+                
+            }
+            else if (endPos.y < startPos.y)
+            {
+                Vector3 horisontalEndPos = new Vector3 (startPos.x + ((endPos.x - startPos.x) /2), startPos.y, startPos.z + ((startPos.z - startPos.z) /2));
+            }
+
+                //smooth movemnt between points
+                float travelPercent = 0f;
 
             transform.LookAt(endPos);
 

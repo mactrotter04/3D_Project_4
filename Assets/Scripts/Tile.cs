@@ -7,7 +7,7 @@ public class Tile : MonoBehaviour
     [SerializeField] Tower towerPrefab;
 
     GridManager gridManager;
-    Vector2Int coordinates = new Vector2Int();
+    Vector3Int coordinates = new Vector3Int();
 
     PathFinder pathFinder;
 
