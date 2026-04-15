@@ -43,7 +43,7 @@ public class Tile : MonoBehaviour
     {
         if (!IsPlaceable) return;
 
-        if (gridManager.GetNode(coordinates).isWalkable && !pathFinder.WillBlockPath(coordinates))
+        if (IsPlaceable && !pathFinder.WillBlockPath(coordinates))
         {
             //Debug.Log($"clicked on: {transform.name}");
             bool isSuccessful = towerPrefab.CreateTower(towerPrefab, transform.position);
